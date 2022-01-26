@@ -18,7 +18,9 @@ const resolvers = {
     },
   },
   Mutation: {
+    // followed tutorial here as a guideline: https://www.tutorialspoint.com/graphql/graphql_mutation.htm
     changeUserInfo(root, args, context, info) {
+      // would turn db.students.create into something more in line with postgreSQL, but I'm unfamiliar with it
       return db.students.create({
         first_name: args.first_name,
         last_name: args.last_name,
