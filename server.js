@@ -2,7 +2,10 @@
 // https://www.apollographql.com/docs/apollo-server/integrations/middleware/#apollo-server-fastify
 const config = require("./config");
 const { ApolloServer } = require("apollo-server-fastify");
-const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
+const {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} = require("apollo-server-core");
 const typeDefs = require("./data/types/");
 const resolvers = require("./data/resolvers/");
 
@@ -30,11 +33,15 @@ function fastifyAppClosePlugin(app) {
 
 async function startApolloServer(typeDefs, resolvers) {
   const apolloServer = new ApolloServer({
+    // introspection: true,
+    // playground: true, // to resolve "GET query missing." in Postman
     typeDefs,
     resolvers,
+
     plugins: [
       fastifyAppClosePlugin(fastify),
       ApolloServerPluginDrainHttpServer({ httpServer: fastify.server }),
+      ApolloServerPluginLandingPageGraphQLPlayground(),
     ],
     context: ({ request, reply }) => {
       //Invaluable for debugging
